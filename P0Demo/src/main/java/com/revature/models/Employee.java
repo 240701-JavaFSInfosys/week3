@@ -27,7 +27,7 @@ public class Employee {
         this.role = role;
     }
 
-    //TODO: constructor to be used with inserts
+    //TODO: constructor to be used with inserts (no id, and role_id_fk instead of Role)
 
     //getters and setters
     public int getEmployee_id() {

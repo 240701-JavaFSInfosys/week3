@@ -15,7 +15,7 @@ public class EmployeeController {
     //We need an EmployeeDAO to use its employee data methods
     EmployeeDAO eDAO = new EmployeeDAO();
 
-    //This Handler will get used to handle GET requests to /employees
+    //This Handler will handle GET requests to /employees
     public Handler getEmployeesHandler = ctx -> {
 
         //Get an ArrayList of employees, populated by the getEmployees DAO method
@@ -29,6 +29,23 @@ public class EmployeeController {
 
         //We can also set the HTTP Response status code with ctx.status()
         ctx.status(200);
+
+    };
+
+    //This Handler will handle POST requests to /employees
+    public Handler insertEmployeeHandler = ctx -> {
+
+        //We have JSON data coming in, which we need to convert into a Java object before the DAO can use it
+        //We're going to use ctx.bodyAsClass(), to convert the incoming JSON into a Java Employee object
+        Employee newEmployee = ctx.bodyAsClass(Employee.class);
+
+        //TODO: send this employee to the DAO to be inserted into the DB
+
+        ctx.status(201); //201 stands for "created", as in some new data was created
+
+        ctx.result("Employee was inserted into the database! (not really)");
+
+        //NOTE: we can have the json() and status() methods in either order
 
     };
 

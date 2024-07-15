@@ -41,10 +41,14 @@ public class Launcher {
         //instantiate Controllers so we can access their Handlers
         EmployeeController ec = new EmployeeController();
 
-        /*app.get() is it the Javalin method that takes GET requests
+        /*app.get() is the Javalin method that takes GET requests
          In this case, it's calling to the getEmployeesHandler in the EmployeeController
          SO, when we send a GET request to localhost:3000/employees, it goes here.*/
         app.get("/employees", ec.getEmployeesHandler);
+
+        //app.post() is the Javalin method that takes in POST requests
+        //Why are we allowed to have two handlers that end in /employees? It's a different resource since it's a POST, not a GET
+        app.post("/employees", ec.insertEmployeeHandler);
 
     }
 
