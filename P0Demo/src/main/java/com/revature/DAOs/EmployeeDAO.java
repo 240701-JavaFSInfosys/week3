@@ -2,6 +2,7 @@ package com.revature.DAOs;
 
 import com.revature.models.Employee;
 import com.revature.utils.ConnectionUtil;
+import org.postgresql.util.PSQLException;
 
 import java.sql.*; //import everything from java.sql
 import java.util.ArrayList;
@@ -39,7 +40,6 @@ public class EmployeeDAO implements EmployeeDAOInterface{
                         rs.getInt("employee_id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
-                        //TODO: Ben will see about rs.getObject
                         null //TODO: we need a getRoleByID DAO method
                 );
 
@@ -61,6 +61,34 @@ public class EmployeeDAO implements EmployeeDAOInterface{
 
     @Override
     public Employee insertEmployee(Employee emp) {
+
+        //We need a Connection object to interact with the DB
+        try(Connection conn = ConnectionUtil.getConnection()){
+
+            //create our SQL statement String
+            String sql = "INSERT INTO employees (first_name, last_name, role_id_fk) VALUES (?,?,?)";
+
+            //Instantiate a PreparedStatement to hold our SQL command and fill in the wildcards "?"
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            //fill in each wildcard with the Employee object and ps.setXYZ() methods
+            ps.setString(1, emp.getFirst_name());
+            ps.setString(2, emp.getLast_name());
+            ps.setInt(3, emp.getRole_id_fk());
+
+            //Now that our SQL command is complete, we can execute it
+            ps.executeUpdate();
+            //NOTE: executeUpdate() is used for INSERT, UPDATE, DELETE commands
+                //...while executeQuery() is used for SELECT (querying the DB)
+
+            //Now we can return the Employee to the user, assuming nothing went wrong
+            return emp;
+
+        } catch(SQLException e){
+            e.printStackTrace(); //Tell us what went wrong
+            System.out.println("Failed to insert employee!");
+        }
+
         return null;
     }
 }

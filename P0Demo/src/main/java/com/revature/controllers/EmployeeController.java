@@ -3,7 +3,9 @@ package com.revature.controllers;
 import com.revature.DAOs.EmployeeDAO;
 import com.revature.models.Employee;
 import io.javalin.http.Handler;
+import org.postgresql.util.PSQLException;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /* The Controller Layer is where HTTP Requests get sent after Javalin directs them
@@ -39,11 +41,20 @@ public class EmployeeController {
         //We're going to use ctx.bodyAsClass(), to convert the incoming JSON into a Java Employee object
         Employee newEmployee = ctx.bodyAsClass(Employee.class);
 
-        //TODO: send this employee to the DAO to be inserted into the DB
+        //Send this employee to the DAO to be inserted into the DB
+        Employee insertedEmployee = eDAO.insertEmployee(newEmployee);
 
-        ctx.status(201); //201 stands for "created", as in some new data was created
-
-        ctx.result("Employee was inserted into the database! (not really)");
+        //If something goes wrong in the DAO, it will return null.
+        //We can send back an error code/message if so
+        if (insertedEmployee == null) {
+            ctx.status(400); //400 stands for bad request
+            //TODO: we could make a custom exception like "ManagerAlreadyExistsException"
+            ctx.result("Failed to insert Employee! Check your JSON!");
+        } else{
+            //if the insert is successful, return 201 and the new Employee
+            ctx.status(201); //201 stands for "created", as in some new data was created
+            ctx.json(insertedEmployee); //send the new inserted Employee back to the user
+        }
 
         //NOTE: we can have the json() and status() methods in either order
 
