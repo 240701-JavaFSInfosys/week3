@@ -50,6 +50,10 @@ public class Launcher {
         //Why are we allowed to have two handlers that end in /employees? It's a different resource since it's a POST, not a GET
         app.post("/employees", ec.insertEmployeeHandler);
 
+        //this endpoint lets us get a Role by ID
+        //what is {id}? this is a PATH PARAMETER. The id we search for is variable.
+        //app.get("/role/{id}", //TODO: role controller getRoleByIdHandler));
+
     }
 
 }

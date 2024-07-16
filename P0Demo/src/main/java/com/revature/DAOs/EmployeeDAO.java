@@ -1,6 +1,7 @@
 package com.revature.DAOs;
 
 import com.revature.models.Employee;
+import com.revature.models.Role;
 import com.revature.utils.ConnectionUtil;
 import org.postgresql.util.PSQLException;
 
@@ -43,7 +44,17 @@ public class EmployeeDAO implements EmployeeDAOInterface{
                         null //TODO: we need a getRoleByID DAO method
                 );
 
-                employees.add(e);
+                //We need to use the getRoleById method to populate the Employees Role object
+                RoleDAO rDAO = new RoleDAO();
+                Role role = rDAO.getRoleById(rs.getInt("role_id_fk"));
+
+                //use the setter of Employee to populate the newly created Role object
+                e.setRole(role);
+
+                //NOTE: we could have instantiated the Role before the Employee
+                //but we did things in a different order on Monday
+
+                employees.add(e); //add the populated Employee to the ArrayList
 
             } //end of while loop - no more employees to see!
 
