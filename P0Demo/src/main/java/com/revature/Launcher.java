@@ -56,6 +56,9 @@ public class Launcher {
         //what is {id}? this is a PATH PARAMETER. The id we search for is variable.
         app.get("/roles/{id}", rc.getRoleByIdHandler);
 
+        //this endpoint lets us update a role salary
+        app.patch("/roles/{id}", rc.updateSalaryHandler);
+
     }
 
 }

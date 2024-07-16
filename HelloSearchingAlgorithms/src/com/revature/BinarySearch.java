@@ -24,7 +24,7 @@ public class BinarySearch {
        -It works by comparing the target to the middle element of the Array
        -If the target is less than the middle element, we search the left half of the Array
        -If the target is greater than the middle element, we search the right half of the Array
-       -We repeat this process on the half od the Array that we know the target is in
+       -We repeat this process on the half of the Array that we know the target is in
        -We continue this process until we find the target, or determine that it's not in the Array
        -NOTE: Binary search only works on SORTED collections of data.
             -So we should make sure our collection is sorter before attempting Binary Search */
