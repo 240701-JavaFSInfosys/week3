@@ -39,11 +39,16 @@ public class RoleController {
         //NOTE: salary is coming in as a single value, so we'll use .body(), not .bodyAsClass()
         int salary = Integer.parseInt(ctx.body());
 
-        //TODO: actually send this to the DAO
+        //Call the DAO method to update the salary, giving it the ID and the Salary
+        if(rDAO.updateRoleSalary(role_id, salary) > 0){
+            ctx.status(202); //202 stands for accepted - update accepted
+            ctx.result("Role salary " + role_id + " has been updated to: " + salary);
+        } else {
+            ctx.status(400); //bad request - something went wrong
+            ctx.result("Update failed! Make sure the Role Id and salary are valid.");
+        }
 
-        //mock response
-        ctx.status(202); //202 stands for accepted - update accepted
-        ctx.result("Role salary " + role_id + " has been updated to: " + salary);
+
 
         //TODO: we could get the role title for a more descriptive output
 

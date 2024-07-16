@@ -48,6 +48,31 @@ public class RoleDAO implements RoleDAOInterface{
 
     @Override
     public int updateRoleSalary(int roleId, int newSalary) {
+
+        //open a connection
+        try(Connection conn = ConnectionUtil.getConnection()){
+
+            //Create our SQL String
+            String sql = "UPDATE roles SET role_salary = ? WHERE role_id = ?";
+
+            //Create a PreparedStatement to fill in the wildcards
+            PreparedStatement ps = conn.prepareStatement(sql);
+
+            //ps.setXYZ methods to fill in the wildcards
+            ps.setInt(1, newSalary);
+            ps.setInt(2, roleId);
+
+            //execute the update!
+            ps.executeUpdate();
+
+            //if successful, return the new salary!
+            return newSalary;
+
+        } catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("Couldn't update Role salary!!!");
+        }
+
         return 0;
     }
 }
