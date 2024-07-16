@@ -1,6 +1,7 @@
 package com.revature;
 
 import com.revature.controllers.EmployeeController;
+import com.revature.controllers.RoleController;
 import com.revature.utils.ConnectionUtil;
 import io.javalin.Javalin;
 
@@ -40,6 +41,7 @@ public class Launcher {
 
         //instantiate Controllers so we can access their Handlers
         EmployeeController ec = new EmployeeController();
+        RoleController rc = new RoleController();
 
         /*app.get() is the Javalin method that takes GET requests
          In this case, it's calling to the getEmployeesHandler in the EmployeeController
@@ -52,7 +54,7 @@ public class Launcher {
 
         //this endpoint lets us get a Role by ID
         //what is {id}? this is a PATH PARAMETER. The id we search for is variable.
-        //app.get("/role/{id}", //TODO: role controller getRoleByIdHandler));
+        app.get("/roles/{id}", rc.getRoleByIdHandler);
 
     }
 
