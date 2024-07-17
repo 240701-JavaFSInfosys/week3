@@ -1,5 +1,6 @@
 package com.revature;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -80,6 +81,13 @@ public class Launcher {
 
         //print out the processed names
         System.out.println(newNames);
+
+        //quick example of Reflection API
+        Class<Thread> threadClassForReflection = Thread.class;
+
+        for(Method m : threadClassForReflection.getMethods()){
+            System.out.println(m.getName());
+        }
 
     }
 }

@@ -1,5 +1,6 @@
 package com.revature;
 
+import com.revature.controllers.AuthController;
 import com.revature.controllers.EmployeeController;
 import com.revature.controllers.RoleController;
 import com.revature.utils.ConnectionUtil;
@@ -42,6 +43,7 @@ public class Launcher {
         //instantiate Controllers so we can access their Handlers
         EmployeeController ec = new EmployeeController();
         RoleController rc = new RoleController();
+        AuthController ac = new AuthController();
 
         /*app.get() is the Javalin method that takes GET requests
          In this case, it's calling to the getEmployeesHandler in the EmployeeController
@@ -58,6 +60,9 @@ public class Launcher {
 
         //this endpoint lets us update a role salary
         app.patch("/roles/{id}", rc.updateSalaryHandler);
+
+        //this endpoint will accept POST requests to /login to login the user
+        app.post("/login", ac.loginHandler);
 
     }
 
