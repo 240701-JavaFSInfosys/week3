@@ -2,6 +2,7 @@ package com.revature.controllers;
 
 import com.revature.DAOs.EmployeeDAO;
 import com.revature.models.Employee;
+import com.revature.services.EmployeeService;
 import io.javalin.http.Handler;
 import org.postgresql.util.PSQLException;
 
@@ -17,11 +18,14 @@ public class EmployeeController {
     //We need an EmployeeDAO to use its employee data methods
     EmployeeDAO eDAO = new EmployeeDAO();
 
+    //OLD^ we're using services now:
+    EmployeeService es = new EmployeeService();
+
     //This Handler will handle GET requests to /employees
     public Handler getEmployeesHandler = ctx -> {
 
-        //Get an ArrayList of employees, populated by the getEmployees DAO method
-        ArrayList<Employee> employees = eDAO.getEmployees();
+        //Get an ArrayList of employees, populated by the getEmployees service method
+        ArrayList<Employee> employees = es.getEmployees();
 
         //PROBLEM: we can't send plain Java in an HTTP Response - it only takes JSON
 
@@ -41,20 +45,32 @@ public class EmployeeController {
         //We're going to use ctx.bodyAsClass(), to convert the incoming JSON into a Java Employee object
         Employee newEmployee = ctx.bodyAsClass(Employee.class);
 
-        //Send this employee to the DAO to be inserted into the DB
-        Employee insertedEmployee = eDAO.insertEmployee(newEmployee);
-
-        //If something goes wrong in the DAO, it will return null.
-        //We can send back an error code/message if so
-        if (insertedEmployee == null) {
+        try {
+            //Send this employee to the service to be inserted into the DB
+            Employee insertedEmployee = es.insertEmployee(newEmployee);
+            ctx.status(201); //201 "created" - the resource was created
+            ctx.json(insertedEmployee); //send the employee back to the user
+        } catch (IllegalArgumentException e){
             ctx.status(400); //400 stands for bad request
-            //TODO: we could make a custom exception like "ManagerAlreadyExistsException"
-            ctx.result("Failed to insert Employee! Check your JSON!");
-        } else{
-            //if the insert is successful, return 201 and the new Employee
-            ctx.status(201); //201 stands for "created", as in some new data was created
-            ctx.json(insertedEmployee); //send the new inserted Employee back to the user
+            ctx.result(e.getMessage()); //send back the specific exception message - user friendly!
+        } catch (NullPointerException e){
+            ctx.status(400);
+            ctx.result("NullPointer got thrown - we didn't do lastname checks");
         }
+
+
+
+//        //If something goes wrong in the DAO, it will return null.
+//        //We can send back an error code/message if so
+//        if (insertedEmployee == null) {
+//            ctx.status(400); //400 stands for bad request
+//            //TODO: we could make a custom exception like "ManagerAlreadyExistsException"
+//            ctx.result("Failed to insert Employee! Check your JSON!");
+//        } else{
+//            //if the insert is successful, return 201 and the new Employee
+//            ctx.status(201); //201 stands for "created", as in some new data was created
+//            ctx.json(insertedEmployee); //send the new inserted Employee back to the user
+//        }
 
         //NOTE: we can have the json() and status() methods in either order
 
