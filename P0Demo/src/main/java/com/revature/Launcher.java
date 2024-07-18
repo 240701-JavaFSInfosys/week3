@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public class Launcher {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         /* This is a "try with resources" block
         A resource is opened up within the parentheses of the try block
@@ -37,8 +37,10 @@ public class Launcher {
 
         //ENDPOINT HANDLERS----------------------
 
-        //TODO: a bunch of notes
-
+        /*Below, we'll expose different paths to different functionalities...
+        ...by using the app.get(), app.post(), app.put(), etc. methods (not shown: app.patch, app.delete)
+         When requests come in, they must match one these paths in order to execute some specific behavior.
+         they'll call the Handlers we write in our Controllers- they "handle" http requests */
 
         //instantiate Controllers so we can access their Handlers
         EmployeeController ec = new EmployeeController();

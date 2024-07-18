@@ -6,6 +6,8 @@ import com.revature.models.LoginDTO;
 public class AuthService {
 
     //TODO: make the actual login DAO method... hardcoded for now
+    //The DAO method for login would check if a user exists by username/password
+    //select where username = ? and password = ?;
 
     //Again, this would realistically be username/password but we just have firstname/lastname
     public Employee login(LoginDTO lDTO){

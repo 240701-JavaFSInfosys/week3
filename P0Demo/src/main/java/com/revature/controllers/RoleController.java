@@ -34,26 +34,40 @@ public class RoleController {
 
     };
 
+    //NOTE: this Handler is using our Login functionality
+    //you can ignore this session check stuff if you're not doing login for P0
+
     //This Handler will handle PATCH requests to /roles/{id}
     public Handler updateSalaryHandler = ctx -> {
 
-        //The user will include the role id in the path parameter...
-        //...and include the new salary in the request body
-        int role_id = Integer.parseInt(ctx.pathParam("id"));
+        //We're gonna wrap this entire functionality with a login check
+        //if the HttpSession in AuthControll is null, don't let the user update a salary
+        //send back an unauthorized status code
 
-        //NOTE: salary is coming in as a single value, so we'll use .body(), not .bodyAsClass()
-        int salary = Integer.parseInt(ctx.body());
+        if(AuthController.ses != null) {
 
-        try{
-            //send the two values above to the service
-            rs.updateRoleSalary(role_id, salary);
-            ctx.status(202); //202 - accepted
-            ctx.result("Role salary " + role_id + " has been updated to: " + salary);
-        } catch(IllegalArgumentException e){
-            ctx.status(400); //bad request
-            ctx.result(e.getMessage());
+            //The user will include the role id in the path parameter...
+            //...and include the new salary in the request body
+            int role_id = Integer.parseInt(ctx.pathParam("id"));
+
+            //NOTE: salary is coming in as a single value, so we'll use .body(), not .bodyAsClass()
+            int salary = Integer.parseInt(ctx.body());
+
+            try {
+                //send the two values above to the service
+                rs.updateRoleSalary(role_id, salary);
+                ctx.status(202); //202 - accepted
+                ctx.result("Role salary " + role_id + " has been updated to: " + salary);
+            } catch (IllegalArgumentException e) {
+                ctx.status(400); //bad request
+                ctx.result(e.getMessage());
+            }
+
+        } else {
+            //if the user is not logged in (HttpSession == null)
+            ctx.status(401); //unauthorized
+            ctx.result("You must be logged in to update a Role salary!");
         }
-
 
 //        //Call the DAO method to update the salary, giving it the ID and the Salary
 //        if(rDAO.updateRoleSalary(role_id, salary) > 0){

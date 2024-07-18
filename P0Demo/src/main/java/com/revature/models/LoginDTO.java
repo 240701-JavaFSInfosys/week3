@@ -17,8 +17,11 @@ public class LoginDTO {
     private String first_name;
     private String last_name;
 
-    //for DTOs we typically just need an all-args constructor and getters/setters.
 
+    //need a no args constructor for the javalin 6 deserialization
+    //which is basically what helps us make Java <-> JSON conversions
+    public LoginDTO() {
+    }
 
     public LoginDTO(String first_name, String last_name) {
         this.first_name = first_name;
